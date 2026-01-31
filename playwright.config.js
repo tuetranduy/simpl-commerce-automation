@@ -4,7 +4,6 @@ export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
   workers: 1,
   reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
   use: {
@@ -14,7 +13,7 @@ export default defineConfig({
     video: "retain-on-failure",
     actionTimeout: 30000,
     navigationTimeout: 60000,
-    headless: false,
+    headless: process.env.CI ? true : false,
   },
   projects: [
     {
