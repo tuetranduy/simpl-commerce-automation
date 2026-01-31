@@ -1,0 +1,14 @@
+{
+  "default": {
+    "username": "test@example.com",
+    "password": "test123"
+  },
+  "valid": {
+    "username": "user@example.com",
+    "password": "validPassword123"
+  },
+  "admin": {
+    "username": "admin@example.com",
+    "password": "adminPassword456"
+  }
+}
