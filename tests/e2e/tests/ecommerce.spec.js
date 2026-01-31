@@ -224,4 +224,43 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       }, 60000);
     });
   });
+
+  test.describe("Add to Cart", () => {
+    test("should add product to cart from product page", async ({ page }) => {
+      // Navigate to product detail page
+      await page.goto("https://demo.simplcommerce.com/iphone-6s-16gb", {
+        waitUntil: "networkidle",
+        timeout: 30000,
+      });
+
+      // Verify product details are visible
+      const productName = await productPage.getProductName();
+      expect(productName).toBeTruthy();
+
+      const productPrice = await productPage.getProductPrice();
+      expect(productPrice).toBeTruthy();
+
+      // Click add to cart using the same selector pattern that works in existing tests
+      const addBtn = page.locator(".btn-add-cart").first();
+      await addBtn.click();
+
+      // Wait for Angular to update cart and modal to appear
+      await page.waitForTimeout(1500);
+
+      // Close the modal dialog if it appears
+      const continueBtn = page.locator('button:has-text("Continue shopping")').first();
+      if (await continueBtn.isVisible().catch(() => false)) {
+        await continueBtn.click();
+        await page.waitForTimeout(500);
+      }
+
+      // Navigate to cart to verify item is there
+      await header.clickCart();
+      await page.waitForLoadState("networkidle");
+
+      // Verify cart has item
+      const itemCount = await cartPage.getItemCount();
+      expect(itemCount).toBeGreaterThan(0);
+    }, 60000);
+  });
 });
