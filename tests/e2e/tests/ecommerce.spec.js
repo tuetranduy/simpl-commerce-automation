@@ -5,30 +5,6 @@ import { CartPage } from "../pages/cart.page";
 import { CheckoutPage } from "../pages/checkout.page";
 import { Header } from "../pages/header.component";
 
-const BASE_URL = "https://demo.simplcommerce.com/";
-
-// Test data for checkout scenarios
-const validAddress = {
-  firstName: "John",
-  lastName: "Doe",
-  email: "john.doe@example.com",
-  country: "United States",
-  state: "California",
-  city: "Los Angeles",
-  address1: "123 Main Street",
-  address2: "Apt 4",
-  zipCode: "90001",
-  phone: "555-123-4567",
-};
-
-const validPaymentInfo = {
-  cardholderName: "John Doe",
-  cardNumber: "4111111111111111",
-  cardCode: "123",
-  expireMonth: "12",
-  expireYear: "2028",
-};
-
 test.describe("SimplCommerce E-commerce Tests", () => {
   let homePage;
   let productPage;
@@ -344,7 +320,7 @@ test.describe("SimplCommerce E-commerce Tests", () => {
 
       // Step 4: Find and click the + button to increase quantity
       // The + button is the second button in the cart row (after the - button)
-      const buttons = await page.locator('table tbody tr button').all();
+      const buttons = await page.locator("table tbody tr button").all();
       if (buttons.length >= 2) {
         await buttons[1].click(); // Click the + button
         await page.waitForTimeout(1500);
