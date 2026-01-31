@@ -9,7 +9,10 @@
       "Bash(npx playwright@latest screenshot --full-page https://demo.simplcommerce.com/ demo-homepage.png)",
       "Bash(npm test:*)",
       "Bash(curl:*)",
-      "Bash(npx playwright test:*)"
+      "Bash(npx playwright test:*)",
+      "Bash(HEADED=true npx playwright test tests/e2e/tests/ecommerce.spec.js -g \"add product to cart\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

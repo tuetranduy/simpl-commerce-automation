@@ -4,4 +4,4 @@ screenshots/
 .env
 *.log
 CLAUDE.md
-.claude
+.claude/
