@@ -3,3 +3,4 @@ playwright-report/
 screenshots/
 .env
 *.log
+CLAUDE.md

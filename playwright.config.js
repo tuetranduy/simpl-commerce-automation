@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -11,23 +11,18 @@ export default defineConfig({
     ['list']
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'https://example.com',
+    baseURL: 'https://demo.simplcommerce.com/',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     actionTimeout: 30000,
     navigationTimeout: 60000,
+    headless: !process.env.HEADED,
   },
   projects: [
     {
       name: 'chromium',
-      use: {
-        browserName: 'chromium',
-        launchOptions: {
-          headless: !process.env.HEADED,
-          args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        },
-      },
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
 });

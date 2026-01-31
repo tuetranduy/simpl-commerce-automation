@@ -4,7 +4,12 @@
       "Bash(tree:*)",
       "Bash(npm install)",
       "Bash(npx playwright install chromium:*)",
-      "Bash(npm test)"
+      "Bash(npm test)",
+      "WebFetch(domain:demo.simplcommerce.com)",
+      "Bash(npx playwright@latest screenshot --full-page https://demo.simplcommerce.com/ demo-homepage.png)",
+      "Bash(npm test:*)",
+      "Bash(curl:*)",
+      "Bash(npx playwright test:*)"
     ]
   }
 }
