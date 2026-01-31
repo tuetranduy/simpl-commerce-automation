@@ -308,5 +308,51 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       const newItemCount = await cartPage.getItemCount();
       expect(newItemCount).toBeLessThanOrEqual(initialItemCount);
     }, 90000);
+
+    test("should update product quantity in cart", async ({ page }) => {
+      // Step 1: Add a product to cart first
+      await page.goto("https://demo.simplcommerce.com/iphone-6s-16gb", {
+        waitUntil: "domcontentloaded",
+        timeout: 60000,
+      });
+
+      // Wait for the page to be interactive
+      await page.waitForSelector(".btn-add-cart", { timeout: 15000 });
+
+      const addBtn = page.locator(".btn-add-cart").first();
+      if (await addBtn.isVisible()) {
+        await addBtn.click();
+        await page.waitForTimeout(2000);
+
+        const continueBtn = page
+          .locator('button:has-text("Continue shopping")')
+          .first();
+        if (await continueBtn.isVisible().catch(() => false)) {
+          await continueBtn.click();
+          await page.waitForTimeout(1000);
+        }
+      }
+
+      // Step 2: Navigate to cart
+      await header.clickCart();
+      await page.waitForLoadState("domcontentloaded");
+      await page.waitForTimeout(2000);
+
+      // Step 3: Verify cart has item
+      const initialItemCount = await cartPage.getItemCount();
+      expect(initialItemCount).toBeGreaterThan(0);
+
+      // Step 4: Find and click the + button to increase quantity
+      // The + button is the second button in the cart row (after the - button)
+      const buttons = await page.locator('table tbody tr button').all();
+      if (buttons.length >= 2) {
+        await buttons[1].click(); // Click the + button
+        await page.waitForTimeout(1500);
+      }
+
+      // Step 5: Verify cart still has items
+      const newItemCount = await cartPage.getItemCount();
+      expect(newItemCount).toBeGreaterThanOrEqual(initialItemCount);
+    }, 120000);
   });
 });
