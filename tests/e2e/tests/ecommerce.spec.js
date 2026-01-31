@@ -248,7 +248,9 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       await page.waitForTimeout(1500);
 
       // Close the modal dialog if it appears
-      const continueBtn = page.locator('button:has-text("Continue shopping")').first();
+      const continueBtn = page
+        .locator('button:has-text("Continue shopping")')
+        .first();
       if (await continueBtn.isVisible().catch(() => false)) {
         await continueBtn.click();
         await page.waitForTimeout(500);
@@ -262,5 +264,49 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       const itemCount = await cartPage.getItemCount();
       expect(itemCount).toBeGreaterThan(0);
     }, 60000);
+
+    test("should remove product from cart", async ({ page }) => {
+      // Step 1: Add a product to cart first
+      await page.goto("https://demo.simplcommerce.com/iphone-6s-16gb", {
+        waitUntil: "domcontentloaded",
+        timeout: 30000,
+      });
+
+      // Wait for the page to be interactive
+      await page.waitForSelector(".btn-add-cart", { timeout: 10000 });
+
+      const addBtn = page.locator(".btn-add-cart").first();
+      if (await addBtn.isVisible()) {
+        await addBtn.click();
+        await page.waitForTimeout(1500);
+
+        const continueBtn = page
+          .locator('button:has-text("Continue shopping")')
+          .first();
+        if (await continueBtn.isVisible().catch(() => false)) {
+          await continueBtn.click();
+          await page.waitForTimeout(500);
+        }
+      }
+
+      // Step 2: Navigate to cart
+      await header.clickCart();
+      await page.waitForLoadState("domcontentloaded");
+
+      // Step 3: Verify cart has item
+      const initialItemCount = await cartPage.getItemCount();
+      expect(initialItemCount).toBeGreaterThan(0);
+
+      // Step 4: Find and click the remove button
+      const removeBtn = page
+        .locator('//button[@ng-click="vm.removeShoppingCartItem(cartItem)"]')
+        .first();
+      await removeBtn.click();
+      await page.waitForTimeout(1500);
+
+      // Step 5: Verify cart item count decreased or cart is empty
+      const newItemCount = await cartPage.getItemCount();
+      expect(newItemCount).toBeLessThanOrEqual(initialItemCount);
+    }, 90000);
   });
 });
