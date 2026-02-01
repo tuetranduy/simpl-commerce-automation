@@ -1,4 +1,4 @@
-import { BasePage } from './base.page';
+import { BasePage } from "./base.page";
 
 /**
  * Login Page - Example page object
@@ -7,7 +7,7 @@ export class LoginPage extends BasePage {
   constructor(page) {
     super(page);
     this.page = page;
-    this.baseUrl = process.env.BASE_URL || 'https://example.com';
+    this.baseUrl = process.env.BASE_URL;
 
     // Selectors
     this.usernameInput = '[data-testid="username"]';
@@ -18,7 +18,7 @@ export class LoginPage extends BasePage {
   }
 
   async navigate() {
-    await super.navigate('/login');
+    await super.navigate("/login");
   }
 
   async login(username, password) {

@@ -43,10 +43,6 @@ Production-ready Playwright automation framework with Page Object Model (POM) pa
 # Install dependencies
 npm install
 
-# Copy environment file
-cp .env.example .env
-
-# Edit .env with your configuration
 ```
 
 ## Usage
