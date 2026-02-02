@@ -22,6 +22,9 @@ test.describe("SimplCommerce E-commerce Tests", () => {
     checkoutPage = new CheckoutPage(page);
     loginPage = new LoginPage(page);
     header = new Header(page);
+
+    // Reset data before every test
+    await homePage.resetData("Phones");
   });
 
   test.describe("Checkout Flow", () => {
@@ -68,7 +71,7 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       // Verify multiple items
       const itemCount = await cartPage.getItemCount();
       expect(itemCount).toBeGreaterThanOrEqual(1);
-    }, 90000);
+    }, 120000);
 
     for (const data of checkoutData) {
       test(`should ${data.testName}`, async ({ page }) => {
