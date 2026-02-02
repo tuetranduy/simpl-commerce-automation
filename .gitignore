@@ -6,3 +6,4 @@ screenshots/
 CLAUDE.md
 .claude/
 test-results/
+.playwright-mcp/

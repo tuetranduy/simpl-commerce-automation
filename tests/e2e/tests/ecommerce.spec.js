@@ -3,6 +3,7 @@ import { HomePage } from "../pages/home.page";
 import { ProductPage } from "../pages/product.page";
 import { CartPage } from "../pages/cart.page";
 import { CheckoutPage } from "../pages/checkout.page";
+import { LoginPage } from "../pages/login.page";
 import { Header } from "../pages/header.component";
 
 test.describe("SimplCommerce E-commerce Tests", () => {
@@ -10,6 +11,7 @@ test.describe("SimplCommerce E-commerce Tests", () => {
   let productPage;
   let cartPage;
   let checkoutPage;
+  let loginPage;
   let header;
 
   test.beforeEach(async ({ page }) => {
@@ -17,6 +19,7 @@ test.describe("SimplCommerce E-commerce Tests", () => {
     productPage = new ProductPage(page);
     cartPage = new CartPage(page);
     checkoutPage = new CheckoutPage(page);
+    loginPage = new LoginPage(page);
     header = new Header(page);
   });
 
@@ -118,7 +121,7 @@ test.describe("SimplCommerce E-commerce Tests", () => {
         {
           waitUntil: "domcontentloaded",
           timeout: 30000,
-        },
+        }
       );
 
       // Either checkout page or cart page should load
@@ -151,6 +154,102 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       const body = await page.locator("body").isVisible();
       expect(body).toBe(true);
     }, 30000);
+
+    test("should complete checkout flow with valid information", async ({
+      page,
+    }) => {
+      // Login
+      await loginPage.navigate();
+      await loginPage.login("testautomation@mailnesia.com", "admin");
+
+      // Ensure we are logged in
+      await expect(page.locator('a[href="/user"]').first()).toBeVisible();
+
+      // Add product
+      await addProductToCart(page, "/iphone-6s-16gb");
+
+      // Go to cart
+      await header.clickCart();
+      await page.waitForLoadState("networkidle");
+
+      // Proceed to checkout
+      // We might be redirected to checkout if we clicked checkout in the modal,
+      // but here we are on cart page.
+      const checkoutBtn = page.getByRole("button", {
+        name: "Process to Checkout",
+      });
+      await expect(checkoutBtn).toBeVisible();
+      await checkoutBtn.click();
+
+      // Fill Shipping Address
+      // We check if the form is visible (it might be pre-filled if saved, but we'll assume we need to fill generic one for this test or "New Address" is default)
+      // Based on exploration, it showed correct fields.
+      await checkoutPage.fillShippingAddress({
+        contactName: "Test Auto",
+        country: "United States",
+        state: "Washington",
+        city: "Seattle",
+        zipCode: "98101",
+        address1: "123 Main St",
+        phone: "555-555-5555",
+      });
+
+      // Click Payment button
+      await page.locator('button:has-text("Payment")').click();
+
+      // Wait for Payment page
+      await page.waitForURL(/.*\/payment/);
+
+      // Select Payment Method (COD)
+      await checkoutPage.selectPaymentMethod("cod");
+
+      // Verify success
+      await expect(page.locator('h2:has-text("Congratulation!")')).toBeVisible({
+        timeout: 30000,
+      });
+      await expect(page.locator("text=We received your order")).toBeVisible();
+    }, 120000);
+
+    test("should handle invalid checkout information", async ({ page }) => {
+      // Login
+      await loginPage.navigate();
+      await loginPage.login("testautomation@mailnesia.com", "admin");
+      await expect(page.locator('a[href="/user"]').first()).toBeVisible();
+
+      // Add product
+      await addProductToCart(page, "/iphone-6s-16gb");
+
+      // Go to cart
+      await header.clickCart();
+      await page.waitForLoadState("networkidle");
+
+      // Proceed to checkout
+      const checkoutBtn = page.getByRole("button", {
+        name: "Process to Checkout",
+      });
+      await expect(checkoutBtn).toBeVisible();
+      await checkoutBtn.click();
+
+      // Ensure we are adding a NEW address
+      await checkoutPage.selectNewAddress();
+
+      // Verify the form is visible
+      await expect(
+        page.locator(checkoutPage.shippingContactName)
+      ).toBeVisible();
+
+      // Attempt to proceed without filling information
+      // The Payment button should be disabled
+      const paymentBtn = page.locator('button:has-text("Payment")');
+      await expect(paymentBtn).toBeDisabled();
+
+      // Fill incomplete information
+      await checkoutPage.fillShippingAddress({
+        contactName: "Invalid User",
+      });
+      // Payment button should still be disabled as other required fields are missing
+      await expect(paymentBtn).toBeDisabled();
+    }, 120000);
   });
 
   test.describe("Checkout Data-Driven Tests", () => {

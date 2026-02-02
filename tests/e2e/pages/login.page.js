@@ -10,15 +10,15 @@ export class LoginPage extends BasePage {
     this.baseUrl = process.env.BASE_URL;
 
     // Selectors
-    this.usernameInput = '[data-testid="username"]';
-    this.passwordInput = '[data-testid="password"]';
-    this.loginButton = '[data-testid="login-button"]';
-    this.errorMessage = '[data-testid="error-message"]';
-    this.forgotPasswordLink = '[data-testid="forgot-password"]';
+    this.usernameInput = '#Email, input[name="Email"]';
+    this.passwordInput = '#Password, input[name="Password"]';
+    this.loginButton = 'button:has-text("Log in"), input[type="submit"]';
+    this.errorMessage = ".text-danger, .validation-summary-errors";
+    this.forgotPasswordLink = 'a:has-text("Forgot your password?")';
   }
 
   async navigate() {
-    await super.navigate("/login");
+    await this.page.goto("https://demo.simplcommerce.com/login");
   }
 
   async login(username, password) {

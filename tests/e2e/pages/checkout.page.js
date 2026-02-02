@@ -7,35 +7,49 @@ export class CheckoutPage {
     this.logger = console;
 
     // Checkout page sections
-    this.checkoutSection = '.checkout-page, .checkout-container';
-    this.pageTitle = '.checkout-page h1, .checkout-container h1, h1:has-text("Checkout")';
+    this.checkoutSection = ".checkout-page, .checkout-container";
+    this.pageTitle =
+      '.checkout-page h1, .checkout-container h1, h1:has-text("Checkout")';
 
     // Billing address section
-    this.billingAddressSection = '.billing-address, .address-section';
-    this.firstNameInput = '#BillingNewAddress_FirstName, input[name="FirstName"]';
+    this.billingAddressSection = ".billing-address, .address-section";
+    this.firstNameInput =
+      '#BillingNewAddress_FirstName, input[name="FirstName"]';
     this.lastNameInput = '#BillingNewAddress_LastName, input[name="LastName"]';
     this.emailInput = '#BillingNewAddress_Email, input[name="Email"]';
     this.companyInput = '#BillingNewAddress_Company, input[name="Company"]';
-    this.countrySelect = '#BillingNewAddress_CountryId, select[name="CountryId"]';
-    this.stateSelect = '#BillingNewAddress_StateProvinceId, select[name="StateProvinceId"]';
+    this.countrySelect =
+      '#BillingNewAddress_CountryId, select[name="CountryId"]';
+    this.stateSelect =
+      '#BillingNewAddress_StateProvinceId, select[name="StateProvinceId"]';
     this.cityInput = '#BillingNewAddress_City, input[name="City"]';
     this.address1Input = '#BillingNewAddress_Address1, input[name="Address1"]';
     this.address2Input = '#BillingNewAddress_Address2, input[name="Address2"]';
-    this.zipCodeInput = '#BillingNewAddress_ZipPostalCode, input[name="ZipPostalCode"]';
-    this.phoneInput = '#BillingNewAddress_PhoneNumber, input[name="PhoneNumber"]';
+    this.zipCodeInput =
+      '#BillingNewAddress_ZipPostalCode, input[name="ZipPostalCode"]';
+    this.phoneInput =
+      '#BillingNewAddress_PhoneNumber, input[name="PhoneNumber"]';
     this.faxInput = '#BillingNewAddress_FaxNumber, input[name="FaxNumber"]';
 
     // Shipping address
-    this.shipToSameAddress = '#ShipToSameAddress';
-    this.shipToDifferentAddress = '#ShipToDifferentAddress';
+    this.newAddressRadio = 'label:has-text("Add another address")';
+    this.shipToSameAddress = "#ShipToSameAddress";
+    this.shipToDifferentAddress = "#ShipToDifferentAddress";
+    this.shippingContactName = "#NewAddressForm_ContactName";
+    this.shippingCountry = "#NewAddressForm_CountryId";
+    this.shippingState = "#NewAddressForm_StateOrProvinceId";
+    this.shippingCity = "#NewAddressForm_City";
+    this.shippingAddress1 = "#NewAddressForm_AddressLine1";
+    this.shippingZipCode = "#NewAddressForm_ZipCode";
+    this.shippingPhone = "#NewAddressForm_Phone";
 
     // Payment method section
-    this.paymentMethodSection = '.payment-method, .payment-section';
-    this.cashOnDelivery = '#paymentmethod_0, label:has-text("Cash on Delivery")';
-    this.checkPayment = '#paymentmethod_1, label:has-text("Check")';
-    this.purchaseOrder = '#paymentmethod_2, label:has-text("Purchase Order")';
-    this.creditCard = '#paymentmethod_3, label:has-text("Credit Card")';
-    this.paypal = '#paymentmethod_4, label:has-text("PayPal")';
+    this.paymentMethodSection = ".payment-method, .payment-section";
+    this.cashOnDelivery = 'button:has-text("Cash on Delivery")';
+    this.checkPayment = 'button:has-text("Check")';
+    this.purchaseOrder = 'button:has-text("Purchase Order")';
+    this.creditCard = 'button:has-text("Pay with Card")';
+    this.paypal = 'button:has-text("PayPal")';
 
     // Payment info section (for credit card)
     this.cardholderName = '#CardholderName, input[name="CardholderName"]';
@@ -45,11 +59,11 @@ export class CheckoutPage {
     this.expireYear = '#ExpireYear, select[name="ExpireYear"]';
 
     // Order summary
-    this.orderSummary = '.order-summary, .checkout-summary';
-    this.orderTotal = '.order-total, .grand-total .amount';
-    this.subtotal = '.subtotal .amount';
-    this.tax = '.tax .amount';
-    this.shipping = '.shipping .amount';
+    this.orderSummary = ".order-summary, .checkout-summary";
+    this.orderTotal = ".order-total, .grand-total .amount";
+    this.subtotal = ".subtotal .amount";
+    this.tax = ".tax .amount";
+    this.shipping = ".shipping .amount";
 
     // Checkout buttons
     this.continueButton = 'button:has-text("Continue"), .btn-continue';
@@ -58,42 +72,57 @@ export class CheckoutPage {
     this.placeOrderButton = 'button:has-text("Place order"), .btn-place-order';
 
     // Validation messages
-    this.validationError = '.field-validation-error, .validation-summary-errors li, .alert-danger';
-    this.errorMessage = '.error-message, .alert';
+    this.validationError =
+      ".field-validation-error, .validation-summary-errors li, .alert-danger";
+    this.errorMessage = ".error-message, .alert";
 
     // Order completion
-    this.orderSuccess = '.order-completed, .success-page';
-    this.orderNumber = '.order-number, .order-id';
+    this.orderSuccess = ".order-completed, .success-page";
+    this.orderNumber = ".order-number, .order-id";
     this.thankYouMessage = 'h1:has-text("Thank you"), .thank-you';
 
     // Progress indicator
-    this.checkoutSteps = '.checkout-steps, .steps-indicator';
-    this.stepBilling = '.step-billing, .step-1';
-    this.stepShipping = '.step-shipping, .step-2';
-    this.stepPayment = '.step-payment, .step-3';
-    this.stepConfirm = '.step-confirm, .step-4';
+    this.checkoutSteps = ".checkout-steps, .steps-indicator";
+    this.stepBilling = ".step-billing, .step-1";
+    this.stepShipping = ".step-shipping, .step-2";
+    this.stepPayment = ".step-payment, .step-3";
+    this.stepConfirm = ".step-confirm, .step-4";
   }
 
   async navigate() {
-    await this.page.goto('https://demo.simplcommerce.com/checkout', {
-      waitUntil: 'domcontentloaded',
-      timeout: 30000
+    await this.page.goto("https://demo.simplcommerce.com/checkout", {
+      waitUntil: "domcontentloaded",
+      timeout: 30000,
     });
     await this.page.waitForTimeout(2000);
   }
 
   async isCheckoutPage() {
-    return await this.page.locator(this.checkoutSection).first().isVisible().catch(() => false) ||
-           await this.page.locator(this.pageTitle).first().isVisible().catch(() => false);
+    return (
+      (await this.page
+        .locator(this.checkoutSection)
+        .first()
+        .isVisible()
+        .catch(() => false)) ||
+      (await this.page
+        .locator(this.pageTitle)
+        .first()
+        .isVisible()
+        .catch(() => false))
+    );
   }
 
   // Billing address methods
   async fillBillingAddress(address) {
     if (address.firstName) {
-      await this.page.fill(this.firstNameInput, address.firstName).catch(() => {});
+      await this.page
+        .fill(this.firstNameInput, address.firstName)
+        .catch(() => {});
     }
     if (address.lastName) {
-      await this.page.fill(this.lastNameInput, address.lastName).catch(() => {});
+      await this.page
+        .fill(this.lastNameInput, address.lastName)
+        .catch(() => {});
     }
     if (address.email) {
       await this.page.fill(this.emailInput, address.email).catch(() => {});
@@ -102,7 +131,9 @@ export class CheckoutPage {
       await this.page.fill(this.companyInput, address.company).catch(() => {});
     }
     if (address.country) {
-      await this.selectOption(this.countrySelect, address.country).catch(() => {});
+      await this.selectOption(this.countrySelect, address.country).catch(
+        () => {}
+      );
     }
     if (address.state) {
       await this.selectOption(this.stateSelect, address.state).catch(() => {});
@@ -111,16 +142,63 @@ export class CheckoutPage {
       await this.page.fill(this.cityInput, address.city).catch(() => {});
     }
     if (address.address1) {
-      await this.page.fill(this.address1Input, address.address1).catch(() => {});
+      await this.page
+        .fill(this.address1Input, address.address1)
+        .catch(() => {});
     }
     if (address.address2) {
-      await this.page.fill(this.address2Input, address.address2).catch(() => {});
+      await this.page
+        .fill(this.address2Input, address.address2)
+        .catch(() => {});
     }
     if (address.zipCode) {
       await this.page.fill(this.zipCodeInput, address.zipCode).catch(() => {});
     }
     if (address.phone) {
       await this.page.fill(this.phoneInput, address.phone).catch(() => {});
+    }
+  }
+
+  async fillShippingAddress(address) {
+    if (address.contactName) {
+      await this.page
+        .fill(this.shippingContactName, address.contactName)
+        .catch(() => {});
+    }
+    if (address.country) {
+      await this.selectOption(this.shippingCountry, address.country).catch(
+        () => {}
+      );
+    }
+    await this.page.waitForTimeout(1000); // Wait for state to load
+    if (address.state) {
+      await this.selectOption(this.shippingState, address.state).catch(
+        () => {}
+      );
+    }
+    if (address.city) {
+      await this.page.fill(this.shippingCity, address.city).catch(() => {});
+    }
+    if (address.address1) {
+      await this.page
+        .fill(this.shippingAddress1, address.address1)
+        .catch(() => {});
+    }
+    if (address.zipCode) {
+      await this.page
+        .fill(this.shippingZipCode, address.zipCode)
+        .catch(() => {});
+    }
+    if (address.phone) {
+      await this.page.fill(this.shippingPhone, address.phone).catch(() => {});
+    }
+  }
+
+  async selectNewAddress() {
+    const radio = this.page.locator(this.newAddressRadio).first();
+    if (await radio.isVisible()) {
+      await radio.click();
+      await this.page.waitForTimeout(500);
     }
   }
 
@@ -132,7 +210,9 @@ export class CheckoutPage {
   }
 
   async clickContinueBilling() {
-    const btn = this.page.locator('button:has-text("Continue"), button[name="save"]').first();
+    const btn = this.page
+      .locator('button:has-text("Continue"), button[name="save"]')
+      .first();
     if (await btn.isVisible()) {
       await btn.click();
       await this.page.waitForTimeout(1000);
@@ -142,15 +222,15 @@ export class CheckoutPage {
   // Payment method methods
   async selectPaymentMethod(method) {
     const methods = {
-      'cod': this.cashOnDelivery,
-      'check': this.checkPayment,
-      'purchaseorder': this.purchaseOrder,
-      'creditcard': this.creditCard,
-      'paypal': this.paypal
+      cod: this.cashOnDelivery,
+      check: this.checkPayment,
+      purchaseorder: this.purchaseOrder,
+      creditcard: this.creditCard,
+      paypal: this.paypal,
     };
     const selector = methods[method.toLowerCase()];
     if (selector) {
-      const radio = this.page.locator(selector);
+      const radio = this.page.locator(selector).first();
       if (await radio.isVisible()) {
         await radio.click();
         await this.page.waitForTimeout(500);
@@ -160,19 +240,27 @@ export class CheckoutPage {
 
   async fillPaymentInfo(paymentInfo) {
     if (paymentInfo.cardholderName) {
-      await this.page.fill(this.cardholderName, paymentInfo.cardholderName).catch(() => {});
+      await this.page
+        .fill(this.cardholderName, paymentInfo.cardholderName)
+        .catch(() => {});
     }
     if (paymentInfo.cardNumber) {
-      await this.page.fill(this.cardNumber, paymentInfo.cardNumber).catch(() => {});
+      await this.page
+        .fill(this.cardNumber, paymentInfo.cardNumber)
+        .catch(() => {});
     }
     if (paymentInfo.cardCode) {
       await this.page.fill(this.cardCode, paymentInfo.cardCode).catch(() => {});
     }
     if (paymentInfo.expireMonth) {
-      await this.selectOption(this.expireMonth, paymentInfo.expireMonth).catch(() => {});
+      await this.selectOption(this.expireMonth, paymentInfo.expireMonth).catch(
+        () => {}
+      );
     }
     if (paymentInfo.expireYear) {
-      await this.selectOption(this.expireYear, paymentInfo.expireYear).catch(() => {});
+      await this.selectOption(this.expireYear, paymentInfo.expireYear).catch(
+        () => {}
+      );
     }
   }
 
@@ -202,7 +290,7 @@ export class CheckoutPage {
     } catch {
       // Ignore
     }
-    return '';
+    return "";
   }
 
   async getOrderNumber() {
@@ -213,17 +301,27 @@ export class CheckoutPage {
       }
       const thankYou = this.page.locator(this.thankYouMessage).first();
       if (await thankYou.isVisible()) {
-        return 'Order placed successfully';
+        return "Order placed successfully";
       }
     } catch {
       // Ignore
     }
-    return '';
+    return "";
   }
 
   async isOrderComplete() {
-    return await this.page.locator(this.orderSuccess).first().isVisible().catch(() => false) ||
-           await this.page.locator(this.thankYouMessage).first().isVisible().catch(() => false);
+    return (
+      (await this.page
+        .locator(this.orderSuccess)
+        .first()
+        .isVisible()
+        .catch(() => false)) ||
+      (await this.page
+        .locator(this.thankYouMessage)
+        .first()
+        .isVisible()
+        .catch(() => false))
+    );
   }
 
   // Validation methods
@@ -244,11 +342,15 @@ export class CheckoutPage {
   }
 
   async hasValidationError() {
-    return await this.page.locator(this.validationError).first().isVisible().catch(() => false);
+    return await this.page
+      .locator(this.validationError)
+      .first()
+      .isVisible()
+      .catch(() => false);
   }
 
   // Complete checkout flow helper
-  async completeCheckout(address, paymentMethod = 'cod', paymentInfo = {}) {
+  async completeCheckout(address, paymentMethod = "cod", paymentInfo = {}) {
     // Fill billing address
     await this.fillBillingAddress(address);
 
@@ -262,7 +364,7 @@ export class CheckoutPage {
     await this.clickContinueBilling();
 
     // Fill payment info if credit card
-    if (paymentMethod === 'creditcard') {
+    if (paymentMethod === "creditcard") {
       await this.fillPaymentInfo(paymentInfo);
       await this.clickContinueBilling();
     }
