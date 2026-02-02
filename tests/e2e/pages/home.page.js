@@ -48,13 +48,9 @@ export class HomePage {
 
   async resetData(industry = "Phones") {
     await this.navigate();
-    const industrySelect = this.page
-      .locator("select")
-      .filter({ hasText: industry })
-      .first();
+    const industrySelect = this.page.locator("#Industry");
 
     await this.page.waitForLoadState("networkidle");
-    await this.page.waitForTimeout(3000);
 
     if (await industrySelect.isVisible()) {
       await industrySelect.selectOption(industry);
@@ -65,7 +61,6 @@ export class HomePage {
 
       // Wait for the reset to process (page reload or network activity)
       await this.page.waitForLoadState("networkidle");
-      await this.page.waitForTimeout(10000);
     } else {
       console.log(`Reset data section or industry '${industry}' not found`);
     }

@@ -22,9 +22,6 @@ test.describe("SimplCommerce E-commerce Tests", () => {
     checkoutPage = new CheckoutPage(page);
     loginPage = new LoginPage(page);
     header = new Header(page);
-
-    // Reset data before every test
-    await homePage.resetData("Phones");
   });
 
   test.describe("Checkout Flow", () => {
