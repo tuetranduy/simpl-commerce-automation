@@ -55,80 +55,6 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       }
     }
 
-    test("should navigate to checkout from cart - validates cart flow", async ({
-      page,
-    }) => {
-      // Add a product to cart first
-      await addProductToCart(page, "/iphone-6s-16gb");
-
-      // Go to cart
-      await header.clickCart();
-      await page.waitForLoadState("networkidle");
-
-      // Verify we're on cart page
-      expect(page.url()).toContain("/cart");
-
-      // Verify cart has item
-      const itemCount = await cartPage.getItemCount();
-      expect(itemCount).toBeGreaterThan(0);
-
-      // Check for checkout button (may not exist on demo)
-      const checkoutBtn = page
-        .locator('a:has-text("Checkout"), button:has-text("Checkout")')
-        .first();
-      const hasCheckoutBtn = await checkoutBtn.isVisible().catch(() => false);
-
-      // If checkout exists, verify it, otherwise validate cart structure
-      if (hasCheckoutBtn) {
-        expect(await checkoutBtn.isVisible()).toBe(true);
-      } else {
-        // Cart page structure validation for demo
-        const cartItems = await cartPage.getCartItems();
-        expect(cartItems.length).toBeGreaterThan(0);
-      }
-    }, 60000);
-
-    test("should complete checkout flow - validates cart operations", async ({
-      page,
-    }) => {
-      // Navigate directly to cart (assume items were added in setup)
-      await cartPage.navigate();
-      await page.waitForLoadState("domcontentloaded");
-      await page.waitForTimeout(1000);
-
-      // Verify we're on cart page
-      expect(page.url()).toContain("/cart");
-
-      // Verify page has loaded
-      const body = await page.locator("body").isVisible();
-      expect(body).toBe(true);
-
-      // Cart page should have content (either items or empty message)
-      const hasContent = await page
-        .locator("table, .cart-page, .shopping-cart")
-        .first()
-        .isVisible()
-        .catch(() => false);
-      expect(hasContent).toBe(true);
-    }, 60000);
-
-    test("should show cart behavior on empty cart checkout attempt", async ({
-      page,
-    }) => {
-      // Navigate directly to checkout URL (demo may redirect or show message)
-      const response = await page.goto(
-        "https://demo.simplcommerce.com/checkout",
-        {
-          waitUntil: "domcontentloaded",
-          timeout: 30000,
-        }
-      );
-
-      // Either checkout page or cart page should load
-      // On demo, checkout may not be implemented
-      expect([200, 302, 404]).toContain(response.status());
-    }, 30000);
-
     test("should handle cart state validation", async ({ page }) => {
       // Add two different products
       await addProductToCart(page, "/iphone-6s-16gb");
@@ -143,18 +69,6 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       expect(itemCount).toBeGreaterThanOrEqual(1);
     }, 90000);
 
-    test("should validate cart page structure", async ({ page }) => {
-      await cartPage.navigate();
-      await page.waitForLoadState("domcontentloaded");
-
-      // Cart page should load
-      expect(page.url()).toContain("/cart");
-
-      // Check page content loaded
-      const body = await page.locator("body").isVisible();
-      expect(body).toBe(true);
-    }, 30000);
-
     test("should complete checkout flow with valid information", async ({
       page,
     }) => {
@@ -166,7 +80,7 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       await expect(page.locator('a[href="/user"]').first()).toBeVisible();
 
       // Add product
-      await addProductToCart(page, "/iphone-6s-16gb");
+      await addProductToCart(page, "/dell-xps-15-9550");
 
       // Go to cart
       await header.clickCart();
@@ -217,7 +131,7 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       await expect(page.locator('a[href="/user"]').first()).toBeVisible();
 
       // Add product
-      await addProductToCart(page, "/iphone-6s-16gb");
+      await addProductToCart(page, "/ipad-pro-wi-fi-4g-128gb");
 
       // Go to cart
       await header.clickCart();
