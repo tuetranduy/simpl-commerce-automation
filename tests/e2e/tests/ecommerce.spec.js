@@ -5,6 +5,7 @@ import { CartPage } from "../pages/cart.page";
 import { CheckoutPage } from "../pages/checkout.page";
 import { LoginPage } from "../pages/login.page";
 import { Header } from "../pages/header.component";
+import checkoutData from "../data/checkout.data.json";
 
 test.describe("SimplCommerce E-commerce Tests", () => {
   let homePage;
@@ -69,60 +70,57 @@ test.describe("SimplCommerce E-commerce Tests", () => {
       expect(itemCount).toBeGreaterThanOrEqual(1);
     }, 90000);
 
-    test("should complete checkout flow with valid information", async ({
-      page,
-    }) => {
-      // Login
-      await loginPage.navigate();
-      await loginPage.login("testautomation@mailnesia.com", "admin");
+    for (const data of checkoutData) {
+      test(`should ${data.testName}`, async ({ page }) => {
+        // Increase timeout for E2E flow
+        test.setTimeout(120000);
 
-      // Ensure we are logged in
-      await expect(page.locator('a[href="/user"]').first()).toBeVisible();
+        // Login
+        await loginPage.navigate();
+        await loginPage.login(data.user.email, data.user.password);
 
-      // Add product
-      await addProductToCart(page, "/dell-xps-15-9550");
+        // Ensure we are logged in
+        await expect(page.locator('a[href="/user"]').first()).toBeVisible();
 
-      // Go to cart
-      await header.clickCart();
-      await page.waitForLoadState("networkidle");
+        // Add product
+        await addProductToCart(page, data.productUrl);
 
-      // Proceed to checkout
-      // We might be redirected to checkout if we clicked checkout in the modal,
-      // but here we are on cart page.
-      const checkoutBtn = page.getByRole("button", {
-        name: "Process to Checkout",
+        // Go to cart
+        await header.clickCart();
+        await page.waitForLoadState("networkidle");
+
+        // Proceed to checkout
+        // We might be redirected to checkout if we clicked checkout in the modal,
+        // but here we are on cart page.
+        const checkoutBtn = page.getByRole("button", {
+          name: "Process to Checkout",
+        });
+        await expect(checkoutBtn).toBeVisible();
+        await checkoutBtn.click();
+
+        // Fill Shipping Address
+        // We check if the form is visible (it might be pre-filled if saved, but we'll assume we need to fill generic one for this test or "New Address" is default)
+        // Based on exploration, it showed correct fields.
+        await checkoutPage.fillShippingAddress(data.shippingAddress);
+
+        // Click Payment button
+        await page.locator('button:has-text("Payment")').click();
+
+        // Wait for Payment page
+        await page.waitForURL(/.*\/payment/);
+
+        // Select Payment Method
+        await checkoutPage.selectPaymentMethod(data.paymentMethod);
+
+        // Verify success
+        await expect(
+          page.locator('h2:has-text("Congratulation!")')
+        ).toBeVisible({
+          timeout: 30000,
+        });
+        await expect(page.locator("text=We received your order")).toBeVisible();
       });
-      await expect(checkoutBtn).toBeVisible();
-      await checkoutBtn.click();
-
-      // Fill Shipping Address
-      // We check if the form is visible (it might be pre-filled if saved, but we'll assume we need to fill generic one for this test or "New Address" is default)
-      // Based on exploration, it showed correct fields.
-      await checkoutPage.fillShippingAddress({
-        contactName: "Test Auto",
-        country: "United States",
-        state: "Washington",
-        city: "Seattle",
-        zipCode: "98101",
-        address1: "123 Main St",
-        phone: "555-555-5555",
-      });
-
-      // Click Payment button
-      await page.locator('button:has-text("Payment")').click();
-
-      // Wait for Payment page
-      await page.waitForURL(/.*\/payment/);
-
-      // Select Payment Method (COD)
-      await checkoutPage.selectPaymentMethod("cod");
-
-      // Verify success
-      await expect(page.locator('h2:has-text("Congratulation!")')).toBeVisible({
-        timeout: 30000,
-      });
-      await expect(page.locator("text=We received your order")).toBeVisible();
-    }, 120000);
+    }
 
     test("should handle invalid checkout information", async ({ page }) => {
       // Login

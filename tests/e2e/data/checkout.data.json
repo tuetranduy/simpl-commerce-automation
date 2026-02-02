@@ -1,0 +1,20 @@
+[
+    {
+        "testName": "Complete checkout flow with Dell XPS",
+        "user": {
+            "email": "testautomation@mailnesia.com",
+            "password": "admin"
+        },
+        "productUrl": "/dell-xps-15-9550",
+        "shippingAddress": {
+            "contactName": "Test Auto",
+            "country": "United States",
+            "state": "Washington",
+            "city": "Seattle",
+            "zipCode": "98101",
+            "address1": "123 Main St",
+            "phone": "555-555-5555"
+        },
+        "paymentMethod": "cod"
+    }
+]
